@@ -7,12 +7,21 @@
 //
 
 #import "MainViewController.h"
-#import "starship.h"
 #import "PhongShader.h"
+#import "starship.h"
+#import "cube.h"
+
+typedef enum Models
+{
+    M_CUBE,
+    M_STARSHIP,
+}
+Models;
 
 @interface MainViewController ()
 {
     float   _rotate;
+    Models  _model;
 }
 
 @property (strong, nonatomic) PhongShader* phongShader;
@@ -27,6 +36,7 @@
     
     // Variables
     _rotate = 0.0f;
+    _model = M_CUBE;
     
     // Set up context
     EAGLContext* context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2];
@@ -48,24 +58,34 @@
     [self loadTexture];
 }
 
-- (void)loadTexture
-{
-    NSDictionary* options = @{GLKTextureLoaderOriginBottomLeft: @YES};
-    NSError* error;
-    NSString* path = [[NSBundle mainBundle] pathForResource:@"starship_decal.png" ofType:nil];
-    GLKTextureInfo* texture = [GLKTextureLoader textureWithContentsOfFile:path options:options error:&error];
-    
-    if (texture == nil)
-        NSLog(@"Error loading file: %@", [error localizedDescription]);
-    
-    glBindTexture(GL_TEXTURE_2D, texture.name);
-    glUniform1i(self.phongShader.uTexture, 0);
-}
-
 - (void)loadShader
 {
     self.phongShader = [[PhongShader alloc] init];
     glUseProgram(self.phongShader.program);
+}
+
+- (void)loadTexture
+{
+    NSDictionary* options = @{GLKTextureLoaderOriginBottomLeft: @YES};
+    NSError* error;
+    NSString* path;
+    switch(_model)
+    {
+        case M_CUBE:
+            path = [[NSBundle mainBundle] pathForResource:@"cube_decal.png" ofType:nil];
+            break;
+            
+        case M_STARSHIP:
+            path = [[NSBundle mainBundle] pathForResource:@"starship_decal.png" ofType:nil];
+            break;
+    }
+    GLKTextureInfo* texture = [GLKTextureLoader textureWithContentsOfFile:path options:options error:&error];
+    
+    if(texture == nil)
+        NSLog(@"Error loading file: %@", [error localizedDescription]);
+    
+    glBindTexture(GL_TEXTURE_2D, texture.name);
+    glUniform1i(self.phongShader.uTexture, 0);
 }
 
 - (void)setMatrices
@@ -82,16 +102,25 @@
     modelViewMatrix = GLKMatrix4RotateX(modelViewMatrix, GLKMathDegreesToRadians(45.0f));
     modelViewMatrix = GLKMatrix4RotateY(modelViewMatrix, GLKMathDegreesToRadians(_rotate));
     modelViewMatrix = GLKMatrix4RotateZ(modelViewMatrix, GLKMathDegreesToRadians(_rotate));
+    switch(_model)
+    {
+        case M_CUBE:
+            modelViewMatrix = GLKMatrix4Scale(modelViewMatrix, 0.5f, 0.5f, 0.5f);
+            break;
+            
+        case M_STARSHIP:
+            modelViewMatrix = GLKMatrix4Scale(modelViewMatrix, 1.0f, 1.0f, 1.0f);
+            break;
+    }
     glUniformMatrix4fv(self.phongShader.uModelViewMatrix, 1, 0, modelViewMatrix.m);
     
     // Normal Matrix
     // Transform normals from object-space to eye-space
     bool invertible;
     GLKMatrix3 normalMatrix = GLKMatrix4GetMatrix3(GLKMatrix4InvertAndTranspose(modelViewMatrix, &invertible));
-    if (!invertible)
+    if(!invertible)
         NSLog(@"MV matrix is not invertible");
     glUniformMatrix3fv(self.phongShader.uNormalMatrix, 1, 0, normalMatrix.m);
-
 }
 
 - (void)glkView:(GLKView *)view drawInRect:(CGRect)rect
@@ -101,33 +130,77 @@
     // Set matrices
     [self setMatrices];
     
-    // Positions
     glEnableVertexAttribArray(self.phongShader.aPosition);
-    glVertexAttribPointer(self.phongShader.aPosition, 3, GL_FLOAT, GL_FALSE, 0, starshipPositions);
-    
-    // Normals
-    glEnableVertexAttribArray(self.phongShader.aNormal);
-    glVertexAttribPointer(self.phongShader.aNormal, 3, GL_FLOAT, GL_FALSE, 0, starshipNormals);
-    
-    // Texels
     glEnableVertexAttribArray(self.phongShader.aTexel);
-    glVertexAttribPointer(self.phongShader.aTexel, 2, GL_FLOAT, GL_FALSE, 0, starshipTexels);
+    glEnableVertexAttribArray(self.phongShader.aNormal);
     
-    // Render by parts
-    for(int i=0; i<starshipMaterials; i++)
+    // Render model
+    switch(_model)
     {
-        // Set material
-        glUniform3f(self.phongShader.uDiffuse, starshipDiffuses[i][0], starshipDiffuses[i][1], starshipDiffuses[i][2]);
-        glUniform3f(self.phongShader.uSpecular, starshipSpeculars[i][0], starshipSpeculars[i][1], starshipSpeculars[i][2]);
-        
-        // Draw vertices
-        glDrawArrays(GL_TRIANGLES, starshipFirsts[i], starshipCounts[i]);
+        case M_CUBE:
+            [self renderCube];
+            break;
+            
+        case M_STARSHIP:
+            [self renderStarship];
+            break;
     }
 }
 
 - (void)update
 {
     _rotate += 1.0f;
+}
+
+- (void)renderCube
+{
+    glVertexAttribPointer(self.phongShader.aPosition, 3, GL_FLOAT, GL_FALSE, 0, cubePositions);
+    glVertexAttribPointer(self.phongShader.aTexel, 2, GL_FLOAT, GL_FALSE, 0, cubeTexels);
+    glVertexAttribPointer(self.phongShader.aNormal, 3, GL_FLOAT, GL_FALSE, 0, cubeNormals);
+    
+    for(int i=0; i<cubeMaterials; i++)
+    {
+        glUniform3f(self.phongShader.uDiffuse, cubeDiffuses[i][0], cubeDiffuses[i][1], cubeDiffuses[i][2]);
+        glUniform3f(self.phongShader.uSpecular, cubeSpeculars[i][0], cubeSpeculars[i][1], cubeSpeculars[i][2]);
+        
+        glDrawArrays(GL_TRIANGLES, cubeFirsts[i], cubeCounts[i]);
+    }
+}
+
+- (void)renderStarship
+{
+    glVertexAttribPointer(self.phongShader.aPosition, 3, GL_FLOAT, GL_FALSE, 0, starshipPositions);
+    glVertexAttribPointer(self.phongShader.aTexel, 2, GL_FLOAT, GL_FALSE, 0, starshipTexels);
+    glVertexAttribPointer(self.phongShader.aNormal, 3, GL_FLOAT, GL_FALSE, 0, starshipNormals);
+    
+    for(int i=0; i<starshipMaterials; i++)
+    {
+        glUniform3f(self.phongShader.uDiffuse, starshipDiffuses[i][0], starshipDiffuses[i][1], starshipDiffuses[i][2]);
+        glUniform3f(self.phongShader.uSpecular, starshipSpeculars[i][0], starshipSpeculars[i][1], starshipSpeculars[i][2]);
+        
+        glDrawArrays(GL_TRIANGLES, starshipFirsts[i], starshipCounts[i]);
+    }
+}
+
+- (IBAction)selectModel:(UISegmentedControl *)sender
+{
+    self.paused = YES;
+    
+    int m = (int)sender.selectedSegmentIndex;
+    switch(m)
+    {
+        case 0:
+            _model = M_CUBE;
+            break;
+            
+        case 1:
+            _model = M_STARSHIP;
+            break;
+    }
+    
+    [self loadTexture];
+    
+    self.paused = NO;
 }
 
 @end

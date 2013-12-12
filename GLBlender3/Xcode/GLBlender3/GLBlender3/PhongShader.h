@@ -2,7 +2,7 @@
 //  PhongShader.h
 //  GLBlender3
 //
-//  Created by Nick Gallimore on 12/12/13.
+//  Created by RRC on 9/9/13.
 //  Copyright (c) 2013 Ricardo Rendon Cepeda. All rights reserved.
 //
 

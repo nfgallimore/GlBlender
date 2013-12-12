@@ -2,13 +2,12 @@
 //  PhongShader.m
 //  GLBlender3
 //
-//  Created by Nick Gallimore on 12/12/13.
+//  Created by RRC on 9/9/13.
 //  Copyright (c) 2013 Ricardo Rendon Cepeda. All rights reserved.
 //
 
 #import "PhongShader.h"
 
-// 1
 // Shaders
 #define STRINGIFY(A) #A
 #include "Phong.vsh"
@@ -22,7 +21,7 @@
     {
         // Program
         self.program = [self BuildProgram:PhongVSH with:PhongFSH];
-    
+        
         // Attributes
         self.aPosition = glGetAttribLocation(self.program, "aPosition");
         self.aNormal = glGetAttribLocation(self.program, "aNormal");

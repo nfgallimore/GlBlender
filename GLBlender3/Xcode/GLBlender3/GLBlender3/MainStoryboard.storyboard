@@ -10,12 +10,32 @@
             <objects>
                 <glkViewController autoresizesArchivedViewToFullSize="NO" preferredFramesPerSecond="30" id="nXL-qX-pwj" customClass="MainViewController" sceneMemberID="viewController">
                     <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="hgC-zf-ubF"/>
-                        <viewControllerLayoutGuide type="bottom" id="wJK-Xx-5pE"/>
+                        <viewControllerLayoutGuide type="top" id="eED-6I-oEm"/>
+                        <viewControllerLayoutGuide type="bottom" id="CrO-0t-u2E"/>
                     </layoutGuides>
                     <glkView key="view" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" drawableDepthFormat="16" drawableMultisample="4X" id="DHf-jo-MZI">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="JL4-78-snn">
+                                <rect key="frame" x="80" y="520" width="161" height="29"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="161" id="Sle-Oy-IDT"/>
+                                </constraints>
+                                <segments>
+                                    <segment title="Cube"/>
+                                    <segment title="Starship"/>
+                                </segments>
+                                <color key="tintColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                <connections>
+                                    <action selector="selectModel:" destination="nXL-qX-pwj" eventType="valueChanged" id="HVT-hG-EpT"/>
+                                </connections>
+                            </segmentedControl>
+                        </subviews>
+                        <constraints>
+                            <constraint firstItem="JL4-78-snn" firstAttribute="centerX" secondItem="DHf-jo-MZI" secondAttribute="centerX" id="X6Z-xu-OvG"/>
+                            <constraint firstAttribute="bottom" secondItem="JL4-78-snn" secondAttribute="bottom" constant="20" symbolic="YES" id="cB7-Uz-A9m"/>
+                        </constraints>
                         <connections>
                             <outlet property="delegate" destination="nXL-qX-pwj" id="nOO-N3-KXJ"/>
                         </connections>

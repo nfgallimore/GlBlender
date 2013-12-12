@@ -3,16 +3,16 @@
 static const char* PhongFSH = STRINGIFY
 (
  
- // Varying
- varying highp vec3 vNormal;
- varying highp vec2 vTexel;
+// Varying
+varying highp vec3 vNormal;
+varying highp vec2 vTexel;
  
- // Uniforms
- uniform highp vec3 uDiffuse;
- uniform highp vec3 uSpecular;
- uniform sampler2D uTexture;
+// Uniforms
+uniform highp vec3 uDiffuse;
+uniform highp vec3 uSpecular;
+uniform sampler2D uTexture;
  
- void main(void)
+void main(void)
 {
     // Material
     highp vec3 ka = vec3(0.05);
@@ -31,7 +31,6 @@ static const char* PhongFSH = STRINGIFY
     highp vec3 V = normalize(vec3(0.0, 0.0, 1.0));
     highp vec3 R = reflect(L, N);
     
-    
     // Illumination factors
     highp float df = max(0.0, dot(L, N));
     highp float sf = pow(max(0.0, dot(R, V)), alpha);
@@ -44,13 +43,12 @@ static const char* PhongFSH = STRINGIFY
     
     // Surface
     highp vec3 surface;
-    if (decal.a > 0.0)
+    if(decal.a > 0.0)
         surface = decal.rgb;
     else
         surface = Ip;
-
-    gl_FragColor = vec4(surface, 1.0);
     
+    gl_FragColor = vec4(surface, 1.0);
 }
  
- );
+);
