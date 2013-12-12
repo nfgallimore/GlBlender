@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>AD40A4F7-E8B4-45E6-832B-D3192D48F4E3</string>
+	<key>IDESourceControlProjectName</key>
+	<string>GLBlender1</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>D1E3D115-9404-4885-9E38-FE398D8783F1</key>
+		<string>https://github.com/nfgallimore/Code.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>iOS Apps/GLBlender1/Code/GLBlender1/GLBlender1.xcodeproj/project.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>D1E3D115-9404-4885-9E38-FE398D8783F1</key>
+		<string>../../../../../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/nfgallimore/Code.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>110</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>D1E3D115-9404-4885-9E38-FE398D8783F1</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>D1E3D115-9404-4885-9E38-FE398D8783F1</string>
+			<key>IDESourceControlWCCName</key>
+			<string>GLBlender1</string>
+		</dict>
+	</array>
+</dict>
+</plist>
