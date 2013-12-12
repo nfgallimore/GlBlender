@@ -5,10 +5,12 @@ static const char* PhongFSH = STRINGIFY
  
  // Varying
  varying highp vec3 vNormal;
+ varying highp vec2 vTexel;
  
  // Uniforms
  uniform highp vec3 uDiffuse;
  uniform highp vec3 uSpecular;
+ uniform sampler2D uTexture;
  
  void main(void)
 {
@@ -37,7 +39,17 @@ static const char* PhongFSH = STRINGIFY
     // Phong reflection equation
     highp vec3 Ip = ka*ia + kd*id*df + ks*is*sf;
     
-    gl_FragColor = vec4(Ip, 1.0);
+    // Decal
+    highp vec4 decal = texture2D(uTexture, vTexel);
+    
+    // Surface
+    highp vec3 surface;
+    if (decal.a > 0.0)
+        surface = decal.rgb;
+    else
+        surface = Ip;
+
+    gl_FragColor = vec4(surface, 1.0);
     
 }
  

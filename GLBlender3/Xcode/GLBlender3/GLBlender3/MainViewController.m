@@ -41,7 +41,25 @@
     glEnable(GL_CULL_FACE);
     glEnable(GL_DEPTH_TEST);
     
+    // Load shader
     [self loadShader];
+    
+    // Load texture
+    [self loadTexture];
+}
+
+- (void)loadTexture
+{
+    NSDictionary* options = @{GLKTextureLoaderOriginBottomLeft: @YES};
+    NSError* error;
+    NSString* path = [[NSBundle mainBundle] pathForResource:@"starship_decal.png" ofType:nil];
+    GLKTextureInfo* texture = [GLKTextureLoader textureWithContentsOfFile:path options:options error:&error];
+    
+    if (texture == nil)
+        NSLog(@"Error loading file: %@", [error localizedDescription]);
+    
+    glBindTexture(GL_TEXTURE_2D, texture.name);
+    glUniform1i(self.phongShader.uTexture, 0);
 }
 
 - (void)loadShader
@@ -90,6 +108,10 @@
     // Normals
     glEnableVertexAttribArray(self.phongShader.aNormal);
     glVertexAttribPointer(self.phongShader.aNormal, 3, GL_FLOAT, GL_FALSE, 0, starshipNormals);
+    
+    // Texels
+    glEnableVertexAttribArray(self.phongShader.aTexel);
+    glVertexAttribPointer(self.phongShader.aTexel, 2, GL_FLOAT, GL_FALSE, 0, starshipTexels);
     
     // Render by parts
     for(int i=0; i<starshipMaterials; i++)

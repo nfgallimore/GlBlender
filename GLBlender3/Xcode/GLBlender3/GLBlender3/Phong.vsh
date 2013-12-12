@@ -6,6 +6,7 @@ static const char* PhongVSH = STRINGIFY
  // Attributes
  attribute vec3 aPosition;
  attribute vec3 aNormal;
+ attribute vec2 aTexel;
  
  // Uniforms
  uniform mat4 uProjectionMatrix;
@@ -14,10 +15,12 @@ static const char* PhongVSH = STRINGIFY
  
  // Varying
  varying vec3 vNormal;
+ varying vec2 vTexel;
  
  void main(void)
 {
     vNormal = uNormalMatrix * aNormal;
+    vTexel = aTexel;
     gl_Position = uProjectionMatrix * uModelViewMatrix * vec4(aPosition, 1.0);
 }
  

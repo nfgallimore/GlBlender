@@ -16,6 +16,7 @@
 // Attribute Handles
 @property (readwrite) GLint aPosition;
 @property (readwrite) GLint aNormal;
+@property (readwrite) GLint aTexel;
 
 // Uniform Handles
 @property (readwrite) GLint uProjectionMatrix;
@@ -23,5 +24,6 @@
 @property (readwrite) GLint uNormalMatrix;
 @property (readwrite) GLint uDiffuse;
 @property (readwrite) GLint uSpecular;
+@property (readwrite) GLint uTexture;
 
 @end
