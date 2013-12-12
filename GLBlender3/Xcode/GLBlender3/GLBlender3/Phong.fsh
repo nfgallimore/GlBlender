@@ -27,14 +27,15 @@ static const char* PhongFSH = STRINGIFY
     highp vec3 L = normalize(vec3(1.0, 1.0, 1.0));
     highp vec3 N = normalize(vNormal);
     highp vec3 V = normalize(vec3(0.0, 0.0, 1.0));
-    highp vec3 R = reflcet(L, N);
+    highp vec3 R = reflect(L, N);
+    
     
     // Illumination factors
     highp float df = max(0.0, dot(L, N));
     highp float sf = pow(max(0.0, dot(R, V)), alpha);
     
     // Phong reflection equation
-    highp vec3 Ip = ka * ia + kd * id * df + ks * is * sf;
+    highp vec3 Ip = ka*ia + kd*id*df + ks*is*sf;
     
     gl_FragColor = vec4(Ip, 1.0);
     
